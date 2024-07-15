@@ -108,9 +108,9 @@ app.get("/api/v1/protected/users", verifyAuthentication, async (req, res) => {
       current_page: page,
       next_page: nextPage,
       prev_page: prevPage,
-      limit,
+      count,
       total_records: users.count,
-      total_page: Math.ceil(users.count / limit),
+      total_page: Math.ceil(users.count / count),
       data: users.rows,
     });
   } catch (error) {
