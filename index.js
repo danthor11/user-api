@@ -96,12 +96,12 @@ app.post("/api/v1/users", async (req, res) => {
 
 app.get("/api/v1/protected/users", verifyAuthentication, async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 5;
-  const index = (page - 1) * limit;
+  const count = parseInt(req.query.count) || 5;
+  const index = (page - 1) * count;
 
   try {
-    const users = await User.findAndCountAll({ limit, offset: index });
-    const nextPage = Math.ceil(users.count / limit) <= page ? null : page + 1;
+    const users = await User.findAndCountAll({ count, offset: index });
+    const nextPage = Math.ceil(users.count / count) <= page ? null : page + 1;
     const prevPage = page - 1 === 0 ? null : page - 1;
 
     res.json({
@@ -124,21 +124,21 @@ app.get("/api/v1/protected/users", verifyAuthentication, async (req, res) => {
 
 app.get("/api/v1/users", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 5;
-  const index = (page - 1) * limit;
+  const count = parseInt(req.query.count) || 5;
+  const index = (page - 1) * count;
 
   try {
-    const users = await User.findAndCountAll({ limit, offset: index });
-    const nextPage = Math.ceil(users.count / limit) <= page ? null : page + 1;
+    const users = await User.findAndCountAll({ count, offset: index });
+    const nextPage = Math.ceil(users.count / count) <= page ? null : page + 1;
     const prevPage = page - 1 === 0 ? null : page - 1;
 
     res.json({
       current_page: page,
       next_page: nextPage,
       prev_page: prevPage,
-      limit,
+      count,
       total_records: users.count,
-      total_page: Math.ceil(users.count / limit),
+      total_page: Math.ceil(users.count / count),
       data: users.rows,
     });
   } catch (error) {
